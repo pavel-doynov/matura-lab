@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моите резултати - Матура'25</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-logo"><a href="index.html">Матура'25</a></div>
+            <div class="nav-action"><a href="test.html" class="btn btn-primary">Започни нов тест</a></div>
+        </nav>
+    </header>
+    <main class="dashboard-container">
+        <h1>Табло на потребителя</h1>
+        <p class="dashboard-welcome">Здравей, [Име на потребителя]! Ето твоя прогрес до момента.</p>
+
+        <div class="dashboard-grid">
+            <!-- Overview Cards -->
+            <div class="dashboard-card overview-card">
+                <h3>Среден резултат</h3>
+                <p class="overview-stat">85%</p>
+                <span>От всички тестове</span>
+            </div>
+            <div class="dashboard-card overview-card">
+                <h3>Решени тестове</h3>
+                <p class="overview-stat">4</p>
+                <span>Общо</span>
+            </div>
+
+            <!-- Progress Chart -->
+            <div class="dashboard-card progress-chart-card">
+                <h3>Прогрес</h3>
+                <img src="https://placehold.co/600x300/ffffff/333333?text=Графика+на+прогреса" alt="Графика на прогреса" style="max-width: 100%; border-radius: 8px;">
+            </div>
+
+            <!-- Recent Tests List -->
+            <div class="dashboard-card recent-tests-card">
+                <h3>Последни резултати</h3>
+                <ul class="recent-tests-list">
+                    <li><a href="#"><span>Пробен изпит #4 (БЕЛ)</span><span class="test-score good">92%</span></a></li>
+                    <li><a href="#"><span>Пробен изпит #3 (БЕЛ)</span><span class="test-score average">81%</span></a></li>
+                    <li><a href="#"><span>Пробен изпит #2 (БЕЛ)</span><span class="test-score average">75%</span></a></li>
+                    <li><a href="#"><span>Пробен изпит #1 (БЕЛ)</span><span class="test-score weak">64%</span></a></li>
+                </ul>
+            </div>
+
+            <!-- Strengths and Weaknesses -->
+            <div class="dashboard-card">
+                <h3>Силни и слаби страни</h3>
+                <ul class="skills-list">
+                    <li class="skill-item"><strong>Силна страна:</strong> Пунктуация на сложно съставно изречение</li>
+                    <li class="skill-item"><strong>Слаба страна:</strong> Членуване на съществителни имена</li>
+                </ul>
+            </div>
+
+            <!-- Recommended Focus -->
+            <div class="dashboard-card">
+                <h3>Препоръчителен фокус</h3>
+                <p>На базата на последните ти резултати, препоръчваме да упражниш следните теми:</p>
+                <div class="focus-tags"><span class="tag">Членуване</span><span class="tag">Употреба на пълен/кратък член</span></div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

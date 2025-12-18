@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пробен изпит по БЕЛ - Матура'25</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-logo"><a href="index.html">Матура'25</a></div>
+            <div class="nav-action"><a href="dashboard.html" class="btn btn-primary">Моите резултати</a></div>
+        </nav>
+    </header>
+    <main class="test-page-container">
+        <div class="test-header">
+            <h1>Пробен изпит по БЕЛ</h1>
+            <div class="test-timer">Оставащо време: <strong>03:59:12</strong></div>
+        </div>
+
+        <div class="test-body">
+            <div class="test-main-content">
+                <div class="test-progress-bar">
+                    <div class="progress" style="width: 2.5%;"></div>
+                </div>
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Въпрос 1 от 40</span>
+                        <span class="question-points">Точки: 1</span>
+                    </div>
+                    <p class="question-text">В кое от изреченията е допусната граматична грешка?</p>
+                    <div class="answers-container">
+                        <label class="answer-option"><input type="radio" name="question1"><span>Двамата братя, които видях, бяха много високи.</span></label>
+                        <label class="answer-option"><input type="radio" name="question1"><span>Уважаеми господин Петров, обръщам се към Вас с молба.</span></label>
+                        <label class="answer-option"><input type="radio" name="question1"><span>Фирмата търси да назначи двама международни шофьори.</span></label>
+                        <label class="answer-option"><input type="radio" name="question1"><span>Колко ученици присъстваха на тържеството вчера?</span></label>
+                    </div>
+                </div>
+
+                <div class="test-navigation">
+                    <button class="btn btn-secondary">Предишен въпрос</button>
+                    <button class="btn btn-primary">Следващ въпрос</button>
+                </div>
+            </div>
+            <aside class="test-sidebar">
+                <h4>Навигация</h4>
+                <div class="question-grid">
+                    <!-- This would be generated dynamically -->
+                    <a href="#" class="q-nav-item current">1</a>
+                    <a href="#" class="q-nav-item">2</a>
+                    <a href="#" class="q-nav-item answered">3</a>
+                    <!-- ... more items -->
+                    <a href="#" class="q-nav-item">40</a>
+                </div>
+                <button class="btn btn-finish">Предай теста</button>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>

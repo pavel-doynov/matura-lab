@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход / Регистрация - Матура'25</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- The header is removed from this page for a more focused experience, but can be added back if needed -->
+    <div class="form-page-container">
+        <div class="form-logo">
+            <a href="index.html">Матура'25</a>
+        </div>
+        <div class="form-container">
+            <div class="form-toggle">
+                <button id="show-login" class="toggle-btn active">Вход</button>
+                <button id="show-register" class="toggle-btn">Регистрация</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <h2>Влезте в профила си</h2>
+                <p>За да видите своите резултати и прогрес.</p>
+                <div class="form-group">
+                    <label for="login-email">Имейл</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Парола</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <div class="form-footer">
+                    <a href="#" class="forgot-password">Забравена парола?</a>
+                    <button type="submit" class="btn btn-form">Вход</button>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <h2>Създайте нов профил</h2>
+                <p>За да започнете своята подготовка още днес.</p>
+                <div class="form-error-message"></div>
+                <div class="form-group">
+                    <label for="register-name">Име</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Имейл</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Парола</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Потвърди парола</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-form">Регистрация</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const $loginForm = $('#login-form');
+            const $registerForm = $('#register-form');
+            const $showLoginBtn = $('#show-login');
+            const $showRegisterBtn = $('#show-register');
+
+            function showForm(formToShow, btnToActivate) {
+                $('.auth-form').removeClass('active');
+                $('.toggle-btn').removeClass('active');
+                formToShow.addClass('active');
+                btnToActivate.addClass('active');
+                $('.form-error-message').hide().text('');
+            }
+
+            $showLoginBtn.on('click', () => showForm($loginForm, $showLoginBtn));
+            $showRegisterBtn.on('click', () => showForm($registerForm, $showRegisterBtn));
+
+            // Check URL hash to show register form directly
+            if (window.location.hash === '#register') {
+                showForm($registerForm, $showRegisterBtn);
+            }
+
+            // Registration form validation
+            $registerForm.on('submit', function(event) {
+                event.preventDefault(); // Prevent actual form submission for now
+
+                const password = $('#register-password').val();
+                const confirmPassword = $('#register-confirm-password').val();
+                const $errorMessage = $registerForm.find('.form-error-message');
+
+                if (password.length < 6) {
+                    $errorMessage.text('Паролата трябва да е поне 6 символа.').show();
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    $errorMessage.text('Паролите не съвпадат!').show();
+                    return;
+                }
+
+                // If validation passes, you can proceed with form submission to a server
+                alert('Регистрацията е успешна (симулация)!');
+                $errorMessage.hide();
+                // this.submit(); // Uncomment this to allow real form submission
+            });
+        });
+    </script>
+</body>
+</html>
+        <nav class="navbar">
+            <div class="nav-logo"><a href="index.html">Матура'25</a></div>
+            <div class="nav-action"><a href="index.html" class="btn btn-secondary">Назад към начало</a></div>
+        </nav>
+    </header>
+    <main style="padding: 4rem 2rem; text-align: center;">
+        <h1>Вход и Регистрация</h1>
+        <p>Тук ще бъдат разположени формулярите за вход и създаване на нов профил.</p>
+        <!-- Login and Sign Up forms will be here -->
+    </main>
+</body>
+</html>

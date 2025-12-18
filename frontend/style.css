@@ -1,0 +1,624 @@
+/* === General Resets and Font Imports === */
+body {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+h1, p {
+    margin: 0;
+}
+
+/* === Header and Navigation === */
+.main-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+}
+
+.nav-logo a {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-menu a {
+    color: #fff;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    position: relative;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.nav-menu a:hover {
+    opacity: 1;
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+/* === Buttons === */
+.btn {
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #fff;
+    color: #6a11cb;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #fff;
+    color: #6a11cb;
+}
+
+/* === Hero Section === */
+.hero-section {
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+    padding-top: 120px; /* Space for header */
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem 8rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.hero-headline {
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero-subheadline {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 500px;
+}
+
+.hero-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.hero-visual img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+
+/* === Wave Divider === */
+.wave-divider {
+    position: absolute;
+    bottom: -1px; /* Fix potential 1px gap */
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.wave-divider svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 70px;
+    transform: scale(-1);
+}
+
+.wave-divider .shape-fill {
+    fill: #f4f7fc; /* Color of the next section */
+}
+
+/* === Responsive Design === */
+@media (max-width: 992px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .hero-visual {
+        order: -1; /* Move image to the top on mobile */
+        margin-bottom: 2rem;
+    }
+    .hero-subheadline {
+        margin: 0 auto;
+    }
+    .hero-buttons {
+        justify-content: center;
+    }
+}
+
+/* === Features Section (index.html) === */
+.features-section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: #334;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon img {
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* === Testimonials Section (index.html) === */
+.testimonials-section {
+    padding: 6rem 2rem;
+    background-color: #fff;
+    text-align: center;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background: #f4f7fc;
+    padding: 2rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.testimonial-text {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.testimonial-author img {
+    border-radius: 50%;
+}
+
+.testimonial-author span {
+    font-weight: 600;
+}
+
+/* === Login/Register Page (login.html) === */
+.form-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.form-logo a {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.form-container {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.form-toggle {
+    display: flex;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #888;
+}
+
+.toggle-btn.active {
+    background-color: #6a11cb;
+    color: #fff;
+    border-radius: 50px;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-form h2 {
+    margin-bottom: 0.5rem;
+}
+
+.auth-form p {
+    margin-bottom: 2rem;
+    color: #777;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-error-message {
+    display: none;
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.forgot-password {
+    font-size: 0.9rem;
+    color: #6a11cb;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-form {
+    width: 100%;
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+}
+
+/* === Test Page (test.html) === */
+.test-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 2rem 4rem;
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.test-timer { font-size: 1.1rem; }
+
+.test-body {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 2rem;
+}
+
+.test-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #eee;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.test-progress-bar .progress {
+    height: 100%;
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 8px;
+}
+
+.test-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.question-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+.test-main-content .btn-primary {
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.question-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.answers-container { display: flex; flex-direction: column; gap: 1rem; }
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.answer-option:hover { background-color: #f9f9f9; }
+.answer-option input { margin-right: 1rem; }
+
+.test-sidebar {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    align-self: start;
+}
+
+.test-sidebar h4 { margin-top: 0; margin-bottom: 1rem; }
+
+.question-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.q-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.q-nav-item:hover { background: #f0f0f0; }
+.q-nav-item.current { border-color: #2575fc; background: #eaf2ff; }
+.q-nav-item.answered { background: #e8f5e9; border-color: #4caf50; }
+
+.btn-finish {
+    width: 100%;
+    background-color: #f44336; color: #fff; border: none;
+}
+/* === Dashboard Page (dashboard.html) === */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 2rem 4rem;
+}
+
+.dashboard-welcome { margin: 0.5rem 0 2rem; color: #555; }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.dashboard-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+.overview-stat {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2575fc;
+    margin: 0.5rem 0;
+}
+
+.progress-chart-card, .recent-tests-card {
+    grid-column: span 2;
+}
+
+.recent-tests-list { display: flex; flex-direction: column; gap: 1rem; }
+.recent-tests-list li a {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+.recent-tests-list li a:hover {
+    background-color: #f0f0f0;
+}
+
+.test-score { font-weight: 700; }
+.test-score.good { color: #4caf50; }
+.test-score.average { color: #ff9800; }
+.test-score.weak { color: #f44336; }
+
+.skills-list { display: flex; flex-direction: column; gap: 1rem; }
+.skill-item { font-size: 1rem; }
+
+.focus-tags { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.tag {
+    background-color: #eaf2ff;
+    color: #2575fc;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* === CTA Section (index.html) === */
+.cta-section {
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+    padding: 5rem 2rem;
+    text-align: center;
+}
+.cta-container h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+.cta-container p { max-width: 500px; margin: 0 auto 2rem; opacity: 0.9; }
+.cta-container .btn-primary { background-color: #fff; color: #6a11cb; }
+
+/* === Footer === */
+.main-footer-bottom {
+    background-color: #333;
+    color: #ccc;
+    padding: 2rem;
+    text-align: center;
+}
+.footer-container { max-width: 1200px; margin: 0 auto; }
+.footer-logo { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+@media (max-width: 992px) {
+    .progress-chart-card, .recent-tests-card {
+        grid-column: span 1;
+    }
+    .test-body { grid-template-columns: 1fr; }
+    .test-sidebar { order: -1; margin-bottom: 2rem; }
+}
