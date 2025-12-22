@@ -370,6 +370,47 @@ h1, p {
     margin-bottom: 1.5rem;
 }
 
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.remember-me-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.remember-me-label input[type="checkbox"] {
+    /* Reset inherited input styles */
+    width: auto;
+    padding: 0;
+    margin-right: 8px;
+    border: none;
+    border-radius: 0;
+    /* Custom checkbox styling */
+    appearance: none;
+    -webkit-appearance: none;
+    height: 17px;
+    width: 17px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.remember-me-label input[type="checkbox"]:checked {
+    background-color: #6a11cb;
+    border-color: #6a11cb;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+
 .form-group label {
     display: block;
     font-weight: 600;
@@ -387,9 +428,8 @@ h1, p {
 
 .form-footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 0; /* Spacing is now handled by .form-options */
 }
 
 .forgot-password {
@@ -465,6 +505,19 @@ h1, p {
 
 .test-main-content .btn-primary {
     background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+}
+
+.test-navigation .btn-secondary {
+    background-color: #fff;
+    color: #6a11cb;
+    border: 2px solid #6a11cb;
+}
+
+.test-navigation .btn-secondary:hover {
+    background-color: #6a11cb;
+    color: #fff;
 }
 
 .question-header {
