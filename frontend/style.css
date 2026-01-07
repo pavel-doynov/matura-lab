@@ -84,6 +84,66 @@ h1, p {
     width: 100%;
 }
 
+/* === Dark Navigation (for pages with light background) === */
+.main-header.dark-nav .nav-logo a,
+.main-header.dark-nav .nav-menu a {
+    color: #333;
+}
+
+.main-header.dark-nav .nav-menu a::after {
+    background-color: #6a11cb;
+}
+
+.main-header.dark-nav .btn-primary {
+    background-color: #6a11cb;
+    color: #fff;
+}
+
+.main-header.dark-nav .btn-primary:hover {
+    background-color: #5a0eb0;
+}
+
+/* === Dropdown Menu === */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    z-index: 100;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 0.8rem 1.5rem;
+    display: block;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.dropdown-content a:hover {
+    background-color: #f4f7fc;
+    color: #6a11cb;
+}
+
+.dropdown-content a::after {
+    display: none;
+}
+
 /* === Buttons === */
 .btn {
     padding: 0.8rem 2rem;
@@ -594,8 +654,8 @@ h1, p {
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
 .dashboard-card {
@@ -603,6 +663,7 @@ h1, p {
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
 }
 
 .overview-stat {
@@ -612,8 +673,14 @@ h1, p {
     margin: 0.5rem 0;
 }
 
+.overview-card {
+    grid-column: 1 / -1;
+}
+
 .progress-chart-card, .recent-tests-card {
-    grid-column: span 2;
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .recent-tests-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -624,6 +691,8 @@ h1, p {
     background: #f9f9f9;
     border-radius: 8px;
     transition: background-color 0.2s ease;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 .recent-tests-list li a:hover {
     background-color: #f0f0f0;
@@ -669,9 +738,19 @@ h1, p {
 .footer-logo { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
 
 @media (max-width: 992px) {
-    .progress-chart-card, .recent-tests-card {
-        grid-column: span 1;
-    }
     .test-body { grid-template-columns: 1fr; }
     .test-sidebar { order: -1; margin-bottom: 2rem; }
+}
+
+@media (max-width: 480px) {
+    .dashboard-card {
+        padding: 1rem;
+    }
+    .dashboard-grid {
+        gap: 0.5rem;
+    }
+    .recent-tests-list li a {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
 }

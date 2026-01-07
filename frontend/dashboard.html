@@ -7,9 +7,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="main-header">
+    <header class="main-header dark-nav">
         <nav class="navbar">
             <div class="nav-logo"><a href="index.html">Матура'25</a></div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Начало</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Материали</a>
+                    <div class="dropdown-content">
+                        <a href="spelling.html">Правописна</a>
+                        <a href="grammar.html">Граматична</a>
+                        <a href="punctuation.html">Пунктуационна</a>
+                        <a href="lexical.html">Лексикална</a>
+                    </div>
+                </li>
+                <li><a href="test.html">Тестове</a></li>
+                <li><a href="dashboard.html">Табло</a></li>
+            </ul>
             <div class="nav-action"><a href="test.html" class="btn btn-primary">Започни нов тест</a></div>
         </nav>
     </header>
@@ -20,14 +34,37 @@
         <div class="dashboard-grid">
             <!-- Overview Cards -->
             <div class="dashboard-card overview-card">
-                <h3>Среден резултат</h3>
-                <p class="overview-stat">85%</p>
-                <span>От всички тестове</span>
+                <h3>Общ преглед</h3>
+                <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 1rem;">
+                    <div>
+                        <p class="overview-stat" style="margin-bottom: 0.5rem;">85%</p>
+                        <span>Среден резултат</span>
+                    </div>
+                    <div>
+                        <p class="overview-stat" style="margin-bottom: 0.5rem;">4</p>
+                        <span>Решени тестове по Литература</span>
+                    </div>
+                    <div>
+                        <p class="overview-stat" style="margin-bottom: 0.5rem;">4</p>
+                        <span>Решени тестове по БЕ</span>
+                    </div>
+                </div>
             </div>
-            <div class="dashboard-card overview-card">
-                <h3>Решени тестове</h3>
-                <p class="overview-stat">4</p>
-                <span>Общо</span>
+
+            <!-- Strengths and Weaknesses -->
+            <div class="dashboard-card strengths-card">
+                <h3>Силни и слаби страни</h3>
+                <ul class="skills-list">
+                    <li class="skill-item"><strong>Силна страна:</strong> Пунктуация на сложно съставно изречение</li>
+                    <li class="skill-item"><strong>Слаба страна:</strong> Членуване на съществителни имена</li>
+                </ul>
+            </div>
+
+            <!-- Recommended Focus -->
+            <div class="dashboard-card focus-card">
+                <h3>Препоръчителен фокус</h3>
+                <p>На базата на последните ти резултати, препоръчваме да упражниш следните теми:</p>
+                <div class="focus-tags"><span class="tag">Членуване</span><span class="tag">Употреба на пълен/кратък член</span></div>
             </div>
 
             <!-- Progress Chart -->
@@ -45,22 +82,6 @@
                     <li><a href="#"><span>Пробен изпит #2 (БЕЛ)</span><span class="test-score average">75%</span></a></li>
                     <li><a href="#"><span>Пробен изпит #1 (БЕЛ)</span><span class="test-score weak">64%</span></a></li>
                 </ul>
-            </div>
-
-            <!-- Strengths and Weaknesses -->
-            <div class="dashboard-card">
-                <h3>Силни и слаби страни</h3>
-                <ul class="skills-list">
-                    <li class="skill-item"><strong>Силна страна:</strong> Пунктуация на сложно съставно изречение</li>
-                    <li class="skill-item"><strong>Слаба страна:</strong> Членуване на съществителни имена</li>
-                </ul>
-            </div>
-
-            <!-- Recommended Focus -->
-            <div class="dashboard-card">
-                <h3>Препоръчителен фокус</h3>
-                <p>На базата на последните ти резултати, препоръчваме да упражниш следните теми:</p>
-                <div class="focus-tags"><span class="tag">Членуване</span><span class="tag">Употреба на пълен/кратък член</span></div>
             </div>
         </div>
     </main>
