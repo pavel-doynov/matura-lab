@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панел - Матура'25</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header dark-nav">
+        <nav class="navbar">
+            <div class="nav-logo">
+                <a href="index.html"><img src="assets/images/IMG_3386.png" alt="Матура'25" style="height: 40px;"></a>
+                <span style="color: white; margin-left: 10px; font-weight: 600; opacity: 0.9; vertical-align: middle;">ADMIN</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" target="_blank">Преглед на сайта</a></li>
+            </ul>
+            <div class="nav-action">
+                <a href="login.html" class="btn btn-secondary">Изход</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <ul class="admin-nav-list">
+                <li class="admin-nav-item"><a href="#" class="admin-nav-link active">Табло</a></li>
+                <li class="admin-nav-item"><a href="#" class="admin-nav-link">Потребители</a></li>
+                <li class="admin-nav-item"><a href="#" class="admin-nav-link">Тестове</a></li>
+                <li class="admin-nav-item"><a href="#" class="admin-nav-link">Материали</a></li>
+                <li class="admin-nav-item"><a href="#" class="admin-nav-link">Настройки</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-main">
+            <!-- Stats Row -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-title">Потребители</span>
+                    <span class="stat-number">1,240</span>
+                    <span style="color: #4caf50; font-size: 0.85rem;">+15 тази седмица</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-title">Решени тестове</span>
+                    <span class="stat-number">8,560</span>
+                    <span style="color: #4caf50; font-size: 0.85rem;">+120 днес</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-title">Активни въпроси</span>
+                    <span class="stat-number">450</span>
+                    <span style="color: #666; font-size: 0.85rem;">В базата данни</span>
+                </div>
+            </div>
+
+            <!-- Recent Users Table -->
+            <div class="admin-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="margin: 0; font-size: 1.25rem;">Последни регистрации</h2>
+                    <a href="#" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Виж всички</a>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Име</th>
+                            <th>Имейл</th>
+                            <th>Дата</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#1240</td>
+                            <td>Александър Димитров</td>
+                            <td>alex.d@example.com</td>
+                            <td>08.01.2026</td>
+                            <td>
+                                <a href="#" class="action-btn btn-edit">Редакция</a>
+                                <a href="#" class="action-btn btn-delete">Изтрий</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#1239</td>
+                            <td>Мария Петрова</td>
+                            <td>maria.p@example.com</td>
+                            <td>08.01.2026</td>
+                            <td>
+                                <a href="#" class="action-btn btn-edit">Редакция</a>
+                                <a href="#" class="action-btn btn-delete">Изтрий</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#1238</td>
+                            <td>Георги Иванов</td>
+                            <td>g.ivanov@example.com</td>
+                            <td>07.01.2026</td>
+                            <td>
+                                <a href="#" class="action-btn btn-edit">Редакция</a>
+                                <a href="#" class="action-btn btn-delete">Изтрий</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Content Management Quick Actions -->
+            <div class="admin-card">
+                <h2 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem;">Управление на съдържанието</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary">Добави нов въпрос</button>
+                    <button class="btn btn-secondary">Създай нов тест</button>
+                    <button class="btn btn-secondary">Качи учебен материал</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
