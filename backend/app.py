@@ -5,13 +5,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # --- Configuration ---
 # API Key from your index.html (Required for logging in via REST API)
-FIREBASE_WEB_API_KEY = "AIzaSyBZk6B088ovHci2NV0JTYkqnL5vVL6xjEs"
+FIREBASE_WEB_API_KEY = os.getenv("FIREBASE_WEB_API_KEY")
 
 # Initialize Firebase Admin SDK
 # Make sure you place serviceAccountKey.json in the same directory
