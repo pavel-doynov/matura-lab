@@ -75,6 +75,7 @@
             const $registerForm = $('#register-form');
             const $showLoginBtn = $('#show-login');
             const $showRegisterBtn = $('#show-register');
+            const API_URL = 'http://127.0.0.1:5000'; // Flask backend URL
 
             function showForm(formToShow, btnToActivate) {
                 $('.auth-form').removeClass('active');
@@ -92,6 +93,45 @@
                 showForm($registerForm, $showRegisterBtn);
             }
 
+            // Login Form Submission
+            $loginForm.on('submit', function(event) {
+                event.preventDefault();
+                const email = $('#login-email').val();
+                const password = $('#login-password').val();
+                const $btn = $(this).find('button[type="submit"]');
+                
+                $btn.prop('disabled', true).text('Влизане...');
+
+                $.ajax({
+                    url: `${API_URL}/login`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: email, password: password }),
+                    success: function(response) {
+                        // Handle Remember Me
+                        const rememberMe = $('#remember-me').is(':checked');
+                        const storage = rememberMe ? localStorage : sessionStorage;
+
+                        // Clear any existing tokens in both storages to prevent conflicts
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('user');
+                        sessionStorage.removeItem('authToken');
+                        sessionStorage.removeItem('user');
+                        
+                        storage.setItem('authToken', response.token);
+                        storage.setItem('user', JSON.stringify(response.user));
+                        
+                        // Redirect to home page
+                        window.location.href = 'index.html';
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'Възникна грешка при входа.';
+                        alert('Грешка: ' + errorMsg);
+                        $btn.prop('disabled', false).text('Вход');
+                    }
+                });
+            });
+
             // Registration form validation
             $registerForm.on('submit', function(event) {
                 event.preventDefault(); // Prevent actual form submission for now
@@ -99,6 +139,8 @@
                 const password = $('#register-password').val();
                 const confirmPassword = $('#register-confirm-password').val();
                 const $errorMessage = $registerForm.find('.form-error-message');
+                const name = $('#register-name').val();
+                const email = $('#register-email').val();
 
                 if (password.length < 6) {
                     $errorMessage.text('Паролата трябва да е поне 6 символа.').show();
@@ -110,24 +152,28 @@
                     return;
                 }
 
-                // If validation passes, you can proceed with form submission to a server
-                alert('Регистрацията е успешна (симулация)!');
-                $errorMessage.hide();
-                // this.submit(); // Uncomment this to allow real form submission
+                const $btn = $(this).find('button[type="submit"]');
+                $btn.prop('disabled', true).text('Регистриране...');
+
+                $.ajax({
+                    url: `${API_URL}/register`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ name: name, email: email, password: password }),
+                    success: function(response) {
+                        alert('Регистрацията е успешна! Моля, влезте в профила си.');
+                        showForm($loginForm, $showLoginBtn);
+                        $btn.prop('disabled', false).text('Регистрация');
+                        $errorMessage.hide();
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'Възникна грешка при регистрацията.';
+                        $errorMessage.text(errorMsg).show();
+                        $btn.prop('disabled', false).text('Регистрация');
+                    }
+                });
             });
         });
     </script>
-</body>
-</html>
-        <nav class="navbar">
-            <div class="nav-logo"><a href="index.html">Матура'25</a></div>
-            <div class="nav-action"><a href="index.html" class="btn btn-secondary">Назад към начало</a></div>
-        </nav>
-    </header>
-    <main style="padding: 4rem 2rem; text-align: center;">
-        <h1>Вход и Регистрация</h1>
-        <p>Тук ще бъдат разположени формулярите за вход и създаване на нов профил.</p>
-        <!-- Login and Sign Up forms will be here -->
-    </main>
 </body>
 </html>

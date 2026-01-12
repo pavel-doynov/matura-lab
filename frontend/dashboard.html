@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моите резултати - Матура'25</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
     <header class="main-header dark-nav">
@@ -85,5 +91,19 @@
             </div>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                if (user.role === 'admin') {
+                    const navMenu = document.querySelector('.nav-menu');
+                    const li = document.createElement('li');
+                    li.innerHTML = '<a href="admin-dashboard.html" style="color: #d32f2f; font-weight: bold;">Админ</a>';
+                    navMenu.appendChild(li);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

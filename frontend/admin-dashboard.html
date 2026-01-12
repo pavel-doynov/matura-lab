@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
+            
+            // 1. Security Check
+            if (!token) {
+                window.location.href = 'login.html';
+            } else if (userStr) {
+                const user = JSON.parse(userStr);
+                if (user.role !== 'admin') {
+                    window.location.href = 'index.html';
+                }
+            }
+
+            // 2. Logout Logic
+            const logoutBtn = document.querySelector('.nav-action a');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    // The default href="login.html" will handle the redirect, 
+                    // but we must clear storage first.
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    sessionStorage.removeItem('authToken');
+                    sessionStorage.removeItem('user');
+                });
+            }
+        });
+    </script>
 </head>
 <body>
     <header class="main-header dark-nav">
