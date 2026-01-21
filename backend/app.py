@@ -109,5 +109,46 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/admin/upload-questions', methods=['POST'])
+def upload_questions():
+    # 1. Verify Authentication
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    token = auth_header.split(' ')[1]
+    try:
+        # Verify the Firebase ID token
+        auth.verify_id_token(token)
+    except Exception:
+        return jsonify({'error': 'Invalid token'}), 401
+
+    # 2. Process Data
+    if not request.is_json:
+        return jsonify({'error': 'Request must be JSON'}), 400
+
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Empty payload'}), 400
+
+    try:
+        if 'db' not in globals():
+            return jsonify({'error': 'Database not initialized'}), 500
+
+        batch = db.batch()
+        collection_ref = db.collection('questions')
+        
+        items = data if isinstance(data, list) else [data]
+        
+        for item in items:
+            doc_ref = collection_ref.document()
+            batch.set(doc_ref, item)
+        
+        batch.commit()
+        return jsonify({'message': f'Successfully uploaded {len(items)} questions'}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

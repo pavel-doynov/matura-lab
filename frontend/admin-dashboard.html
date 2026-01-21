@@ -34,6 +34,48 @@
                     sessionStorage.removeItem('user');
                 });
             }
+
+            // 3. Upload Questions Logic
+            const addQuestionBtn = document.getElementById('add-question-btn');
+            const fileInput = document.getElementById('question-file-input');
+            const API_URL = 'http://127.0.0.1:5000';
+
+            if (addQuestionBtn && fileInput) {
+                addQuestionBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const jsonData = JSON.parse(event.target.result);
+                            
+                            fetch(`${API_URL}/admin/upload-questions`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify(jsonData)
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.error) alert('Грешка: ' + data.error);
+                                else alert(data.message);
+                                fileInput.value = ''; // Reset
+                            })
+                            .catch(err => alert('Грешка при свързване със сървъра.'));
+                        } catch (err) {
+                            alert('Невалиден JSON файл!');
+                        }
+                    };
+                    reader.readAsText(file);
+                });
+            }
         });
     </script>
 </head>
@@ -139,7 +181,8 @@
             <div class="admin-card">
                 <h2 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem;">Управление на съдържанието</h2>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-primary">Добави нов въпрос</button>
+                    <button id="add-question-btn" class="btn btn-primary">Добави нов въпрос</button>
+                    <input type="file" id="question-file-input" accept=".json" style="display: none;">
                     <button class="btn btn-secondary">Създай нов тест</button>
                     <button class="btn btn-secondary">Качи учебен материал</button>
                 </div>
