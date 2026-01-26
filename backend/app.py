@@ -150,5 +150,137 @@ def upload_questions():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+# --- User Management Routes for Admin ---
+
+@app.route('/admin/users', methods=['GET'])
+def get_users():
+    # 1. Verify Admin
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    token = auth_header.split(' ')[1]
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        user_doc = db.collection('users').document(uid).get()
+        if not (user_doc.exists and user_doc.to_dict().get('role') == 'admin'):
+             return jsonify({'error': 'Admin privileges required'}), 403
+    except Exception as e:
+        return jsonify({'error': 'Invalid token', 'details': str(e)}), 401
+
+    # 2. Fetch users from Firestore
+    try:
+        users_ref = db.collection('users').order_by('createdAt', direction=firestore.Query.DESCENDING).limit(10)
+        users_docs = users_ref.stream()
+        
+        users_list = []
+        for doc in users_docs:
+            user_data = doc.to_dict()
+            if 'createdAt' in user_data and hasattr(user_data['createdAt'], 'isoformat'):
+                user_data['createdAt'] = user_data['createdAt'].strftime('%d.%m.%Y')
+            users_list.append(user_data)
+            
+        return jsonify(users_list), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/users/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    # 1. Verify Admin
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    token = auth_header.split(' ')[1]
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        user_doc = db.collection('users').document(uid).get()
+        if not (user_doc.exists and user_doc.to_dict().get('role') == 'admin'):
+             return jsonify({'error': 'Admin privileges required'}), 403
+    except Exception:
+        return jsonify({'error': 'Invalid token'}), 401
+
+    # 2. Delete user
+    try:
+        auth.delete_user(user_id)
+        db.collection('users').document(user_id).delete()
+        return jsonify({'message': f'User {user_id} deleted successfully'}), 200
+    except auth.UserNotFoundError:
+        db.collection('users').document(user_id).delete()
+        return jsonify({'message': f'User {user_id} deleted from Firestore (was not in Auth).'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/users/<user_id>', methods=['PUT'])
+def update_user(user_id):
+    # 1. Verify Admin
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+    token = auth_header.split(' ')[1]
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        user_doc = db.collection('users').document(uid).get()
+        if not (user_doc.exists and user_doc.to_dict().get('role') == 'admin'):
+             return jsonify({'error': 'Admin privileges required'}), 403
+    except Exception:
+        return jsonify({'error': 'Invalid token'}), 401
+
+    # 2. Get data and update
+    data = request.get_json()
+    if not data or 'displayName' not in data:
+        return jsonify({'error': 'Missing displayName in request body'}), 400
+    try:
+        new_name = data['displayName']
+        auth.update_user(user_id, display_name=new_name)
+        db.collection('users').document(user_id).update({'displayName': new_name})
+        updated_doc = db.collection('users').document(user_id).get()
+        user_data = updated_doc.to_dict()
+        if 'createdAt' in user_data and hasattr(user_data['createdAt'], 'isoformat'):
+            user_data['createdAt'] = user_data['createdAt'].strftime('%d.%m.%Y')
+        return jsonify(user_data), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/stats', methods=['GET'])
+def get_admin_stats():
+    # 1. Verify Admin
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    token = auth_header.split(' ')[1]
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        user_doc = db.collection('users').document(uid).get()
+        if not (user_doc.exists and user_doc.to_dict().get('role') == 'admin'):
+             return jsonify({'error': 'Admin privileges required'}), 403
+    except Exception as e:
+        return jsonify({'error': 'Invalid token', 'details': str(e)}), 401
+
+    # 2. Fetch stats from Firestore
+    try:
+        # Note: For very large collections, streaming all docs for a count can be slow/costly.
+        # Consider using a distributed counter for production at scale.
+        questions_docs = db.collection('questions').stream()
+        question_count = len(list(questions_docs))
+
+        users_docs = db.collection('users').stream()
+        user_count = len(list(users_docs))
+
+        return jsonify({
+            'questionCount': question_count,
+            'userCount': user_count
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
