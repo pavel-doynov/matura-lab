@@ -608,6 +608,31 @@ h1, p {
 .answer-option:hover { background-color: #f9f9f9; }
 .answer-option input { margin-right: 1rem; }
 
+/* Answer Feedback Styles */
+.answer-option.correct {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.answer-option.incorrect {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.answer-option.user-selected {
+    border-color: #6a11cb;
+    background-color: #f4f7fc;
+}
+
+.correct-answer-text {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #155724;
+    font-weight: 600;
+}
+
 .test-sidebar {
     background: #fff;
     padding: 1.5rem;
@@ -643,6 +668,25 @@ h1, p {
     width: 100%;
     background-color: #f44336; color: #fff; border: none;
 }
+
+.results-popup {
+    display: none;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.results-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2575fc;
+    margin: 0.5rem 0;
+}
+
 /* === Dashboard Page (dashboard.html) === */
 .dashboard-container {
     max-width: 1200px;

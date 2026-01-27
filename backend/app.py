@@ -1,4 +1,5 @@
 import os
+import random
 import json
 import requests
 from flask import Flask, request, jsonify
@@ -150,6 +151,30 @@ def upload_questions():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/test/generate', methods=['GET'])
+def generate_test():
+    # 1. Verify Authentication (Optional but recommended)
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        questions_ref = db.collection('questions')
+        # Fetch all questions to sample from (efficient enough for <1000 docs)
+        docs = questions_ref.stream()
+        all_questions = []
+        for doc in docs:
+            q_data = doc.to_dict()
+            q_data['id'] = doc.id
+            all_questions.append(q_data)
+        
+        # Select up to 10 random questions
+        num_questions = min(len(all_questions), 10)
+        selected_questions = random.sample(all_questions, num_questions) if all_questions else []
+        
+        return jsonify(selected_questions), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # --- User Management Routes for Admin ---
 

@@ -36,50 +36,45 @@
     <main class="test-page-container">
         <div class="test-header">
             <h1>Пробен изпит по БЕЛ</h1>
-            <div class="test-timer">Оставащо време: <strong>03:59:12</strong></div>
+            <div class="test-timer">Оставащо време: <strong id="timer">04:00:00</strong></div>
         </div>
 
         <div class="test-body">
             <div class="test-main-content">
                 <div class="test-progress-bar">
-                    <div class="progress" style="width: 2.5%;"></div>
+                    <div class="progress" id="progress-bar" style="width: 0%;"></div>
                 </div>
-                <div class="question-card">
-                    <div class="question-header">
-                        <span class="question-number">Въпрос 1 от 40</span>
-                        <span class="question-points">Точки: 1</span>
-                    </div>
-                    <p class="question-text">В кое от изреченията е допусната граматична грешка?</p>
-                    <div class="answers-container">
-                        <label class="answer-option"><input type="radio" name="question1"><span>Двамата братя, които видях, бяха много високи.</span></label>
-                        <label class="answer-option"><input type="radio" name="question1"><span>Уважаеми господин Петров, обръщам се към Вас с молба.</span></label>
-                        <label class="answer-option"><input type="radio" name="question1"><span>Фирмата търси да назначи двама международни шофьори.</span></label>
-                        <label class="answer-option"><input type="radio" name="question1"><span>Колко ученици присъстваха на тържеството вчера?</span></label>
-                    </div>
+                <div id="question-container">
+                    <!-- Questions will be loaded here -->
+                    <div class="question-card"><p>Зареждане на въпроси...</p></div>
                 </div>
 
                 <div class="test-navigation">
-                    <button class="btn btn-secondary">Предишен въпрос</button>
-                    <button class="btn btn-primary">Следващ въпрос</button>
+                    <button id="prev-btn" class="btn btn-secondary">Предишен въпрос</button>
+                    <button id="next-btn" class="btn btn-primary">Следващ въпрос</button>
                 </div>
             </div>
             <aside class="test-sidebar">
                 <h4>Навигация</h4>
-                <div class="question-grid">
-                    <!-- This would be generated dynamically -->
-                    <a href="#" class="q-nav-item current">1</a>
-                    <a href="#" class="q-nav-item">2</a>
-                    <a href="#" class="q-nav-item answered">3</a>
-                    <!-- ... more items -->
-                    <a href="#" class="q-nav-item">40</a>
+                <div class="question-grid" id="question-nav-grid">
+                    <!-- Grid generated dynamically -->
                 </div>
-                <button class="btn btn-finish">Предай теста</button>
+                <button id="finish-btn" class="btn btn-finish">Предай теста</button>
+                <div id="results-popup" class="results-popup">
+                    <h4>Вашият резултат</h4>
+                    <div id="results-score" class="results-score"></div>
+                    <p id="results-message"></p>
+                </div>
             </aside>
         </div>
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Auth Check
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
             const userStr = localStorage.getItem('student') || sessionStorage.getItem('student');
+            
+            // Admin Link Logic
             if (userStr) {
                 const user = JSON.parse(userStr);
                 if (user.role === 'admin') {
@@ -89,6 +84,249 @@
                     navMenu.appendChild(li);
                 }
             }
+
+            // --- Test Logic ---
+            const API_URL = 'http://127.0.0.1:5000';
+            let questions = [];
+            let currentQuestionIndex = 0;
+            let userAnswers = {}; // Map: questionId -> answer
+            let isSubmitted = false;
+
+            const questionContainer = document.getElementById('question-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const finishBtn = document.getElementById('finish-btn');
+            const navGrid = document.getElementById('question-nav-grid');
+            const progressBar = document.getElementById('progress-bar');
+
+            // 1. Fetch Questions
+            const fetchQuestions = async () => {
+                try {
+                    const response = await fetch(`${API_URL}/api/test/generate`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch questions');
+                    questions = await response.json();
+                    console.log('Loaded questions:', questions);
+                    
+                    if (questions.length === 0) {
+                        questionContainer.innerHTML = '<div class="question-card"><p>Няма намерени въпроси в базата данни.</p></div>';
+                        return;
+                    }
+
+                    renderQuestion();
+                    renderSidebar();
+                    startTimer();
+                } catch (error) {
+                    console.error(error);
+                    questionContainer.innerHTML = `<div class="question-card"><p>Грешка при зареждане: ${error.message}</p></div>`;
+                }
+            };
+
+            // 2. Render Current Question
+            const renderQuestion = () => {
+                if (!questions.length) return;
+                const question = questions[currentQuestionIndex];
+                const qNum = currentQuestionIndex + 1;
+                const total = questions.length;
+
+                // Update Progress
+                const progressPercent = ((currentQuestionIndex + 1) / total) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+
+                // Build HTML
+                let inputHtml = '';
+                const savedAnswer = userAnswers[question.id];
+
+                // For now, we only handle multiple choice questions
+                inputHtml = `<div class="answers-container">`;
+                // Ensure options exist and is an array to prevent errors
+                const options = question.options || question.answers || [];
+                if (Array.isArray(options) && options.length > 0) {
+                    options.forEach((opt, index) => {
+                        // Handle both object options ({text:...}) and simple string options
+                        let optionText;
+                        if (typeof opt === 'object' && opt !== null) {
+                            optionText = opt.text || opt.answer || JSON.stringify(opt);
+                        } else {
+                            optionText = String(opt);
+                        }
+
+                        // The user's answer is the index (0-3).
+                        const isChecked = (savedAnswer != null && savedAnswer == index) ? 'checked' : '';
+                        let classList = 'answer-option';
+
+                        // Review Mode Styling
+                        if (isSubmitted) {
+                            // correctID is the index of the right answer
+                            const correctIndex = Number(question.correctID);
+                            const currentIndex = index;
+                            const userSelectedIndex = (savedAnswer != null) ? Number(savedAnswer) : -1;
+
+                            const isCorrectOption = (currentIndex === correctIndex);
+                            const isUserSelection = (currentIndex === userSelectedIndex);
+                            
+                            if (isCorrectOption) {
+                                // The correct answer is always green in review mode.
+                                classList += ' correct';
+                            } else if (isUserSelection && !isCorrectOption) {
+                                // If the user selected this, and it's wrong, it's red.
+                                classList += ' incorrect';
+                            }
+                        } else if (isChecked) { // Before submission, just highlight the selection.
+                            classList += ' user-selected';
+                        }
+
+                        const disabled = isSubmitted ? 'disabled' : '';
+
+                        inputHtml += `
+                            <label class="${classList}">
+                                <input type="radio" name="q_${question.id}" value="${index}" ${isChecked} ${disabled} onchange="handleAnswer('${question.id}', this.value)">
+                                <span>${optionText}</span>
+                            </label>
+                        `;
+                    });
+                } else {
+                    inputHtml += '<p>Няма налични отговори за този въпрос.</p>';
+                }
+                inputHtml += `</div>`;
+
+                questionContainer.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-number">Въпрос ${qNum} от ${total}</span>
+                            <span class="question-points">Точки: 1</span>
+                        </div>
+                        <p class="question-text">${question.question}</p>
+                        ${inputHtml}
+                    </div>
+                `;
+
+                // Update Buttons
+                prevBtn.disabled = currentQuestionIndex === 0;
+                nextBtn.style.display = currentQuestionIndex === total - 1 ? 'none' : 'inline-block';
+                
+                // Update Sidebar Highlight
+                renderSidebar();
+            };
+
+            // 3. Render Sidebar
+            const renderSidebar = () => {
+                navGrid.innerHTML = '';
+                questions.forEach((q, idx) => {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.classList.add('q-nav-item');
+                    a.textContent = idx + 1;
+                    
+                    if (idx === currentQuestionIndex) a.classList.add('current');
+                    if (userAnswers[q.id]) a.classList.add('answered');
+                    
+                    // Review Mode Colors in Sidebar
+                    if (isSubmitted) {
+                        const isCorrect = checkAnswer(q);
+                        a.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+                        a.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+                    }
+
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentQuestionIndex = idx;
+                        renderQuestion();
+                    });
+                    navGrid.appendChild(a);
+                });
+            };
+
+            // 4. Handle User Input
+            window.handleAnswer = (qId, value) => {
+                if (isSubmitted) return;
+                userAnswers[qId] = value;
+                renderSidebar(); // To update 'answered' state
+            };
+
+            const checkAnswer = (question) => {
+                const userAns = userAnswers[question.id];
+                if (userAns == null) return false; // No answer given
+                // Check if the stored answer index matches the question's correctID index.
+                // We use Number() because input value is string "0", "1", etc.
+                return Number(userAns) === Number(question.correctID);
+            };
+
+            // 5. Navigation Events
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    renderQuestion();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            });
+
+            // 6. Submission Logic
+            finishBtn.addEventListener('click', () => {
+                const resultsPopup = document.getElementById('results-popup');
+                
+                if (isSubmitted) {
+                    return;
+                }
+
+                // Check if all answered
+                const answeredCount = Object.keys(userAnswers).length;
+                if (answeredCount < questions.length) {
+                    const confirmSubmit = confirm(`Отговорили сте на ${answeredCount} от ${questions.length} въпроса. Сигурни ли сте, че искате да предадете?`);
+                    if (!confirmSubmit) return;
+                }
+
+                // Submit
+                isSubmitted = true;
+                finishBtn.textContent = 'Тестът е предаден';
+                finishBtn.disabled = true;
+                finishBtn.classList.remove('btn-finish');
+                finishBtn.classList.add('btn-secondary');
+                
+                // Calculate Score
+                let score = 0;
+                questions.forEach(q => {
+                    if (checkAnswer(q)) score++;
+                });
+
+                // Show Results
+                document.getElementById('results-score').textContent = `${score} / ${questions.length}`;
+                
+                const messageEl = document.getElementById('results-message');
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'btn btn-primary';
+                retryBtn.style.marginTop = '1rem';
+                retryBtn.onclick = () => window.location.reload();
+
+                if (score >= questions.length / 2) {
+                    messageEl.innerHTML = 'Браво!<br>';
+                    retryBtn.textContent = 'Нов тест';
+                } else {
+                    messageEl.innerHTML = '';
+                    retryBtn.textContent = 'Опитайте отново';
+                }
+                messageEl.appendChild(retryBtn);
+                
+                resultsPopup.style.display = 'block';
+                
+                renderQuestion(); // Re-render to show colors
+                renderSidebar();
+            });
+
+            // Timer (Visual only for now)
+            const startTimer = () => {
+                // Implementation of a simple countdown could go here
+            };
+
+            // Init
+            fetchQuestions();
         });
     </script>
 </body>
