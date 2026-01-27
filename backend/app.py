@@ -1,5 +1,6 @@
 import os
 import random
+import socket
 import json
 import requests
 from flask import Flask, request, jsonify
@@ -11,7 +12,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all routes
+
+# --- Health Check Route ---
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'Server is running', 'client_ip': request.remote_addr}), 200
 
 # --- Configuration ---
 # API Key from your index.html (Required for logging in via REST API)
@@ -308,4 +314,15 @@ def get_admin_stats():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Helper to print the actual LAN IP
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        print(f"--- SERVER RUNNING ---")
+        print(f"Access from other devices using: http://{s.getsockname()[0]}:5001")
+        s.close()
+    except Exception:
+        print("Could not detect local IP. Ensure you are connected to a network.")
+
+    # debug=False is often more stable for external connections on Windows
+    app.run(host='0.0.0.0', debug=False, port=5001)

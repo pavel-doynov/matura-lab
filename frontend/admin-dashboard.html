@@ -38,7 +38,9 @@
             // 3. Upload Questions Logic
             const addQuestionBtn = document.getElementById('add-question-btn');
             const fileInput = document.getElementById('question-file-input');
-            const API_URL = 'http://127.0.0.1:5000';
+            const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') 
+                ? 'http://127.0.0.1:5001' 
+                : `http://${window.location.hostname}:5001`;
 
             if (addQuestionBtn && fileInput) {
                 addQuestionBtn.addEventListener('click', () => {
