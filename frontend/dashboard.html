@@ -16,6 +16,7 @@
     <header class="main-header dark-nav">
         <nav class="navbar">
             <div class="nav-logo"><a href="index.html"><img src="assets/images/IMG_3386.png" alt="Матура'25" style="height: 40px;"></a></div>
+            <button class="mobile-menu-btn">☰</button>
             <ul class="nav-menu">
                 <li><a href="index.html">Начало</a></li>
                 <li class="dropdown">
@@ -102,6 +103,15 @@
                     li.innerHTML = '<a href="admin-dashboard.html" style="color: #d32f2f; font-weight: bold;">Админ</a>';
                     navMenu.appendChild(li);
                 }
+            }
+
+            // Mobile Menu Logic
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('.nav-menu');
+            if (menuBtn && navMenu) {
+                menuBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
             }
         });
     </script>

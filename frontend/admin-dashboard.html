@@ -221,6 +221,15 @@
             // Initial fetches
             await fetchAndRenderStats();
             await fetchAndRenderUsers();
+
+            // Mobile Menu Logic
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('.nav-menu');
+            if (menuBtn && navMenu) {
+                menuBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
         });
     </script>
 </head>
@@ -231,6 +240,7 @@
                 <a href="index.html"><img src="assets/images/IMG_3386.png" alt="Матура'25" style="height: 40px;"></a>
                 <span style="color: black; margin-left: 10px; font-weight: 600; opacity: 0.9; vertical-align: middle;">ADMIN</span>
             </div>
+            <button class="mobile-menu-btn">☰</button>
             <ul class="nav-menu">
                 <li><a href="index.html" target="_blank">Преглед на сайта</a></li>
             </ul>

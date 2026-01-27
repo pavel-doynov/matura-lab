@@ -6,6 +6,7 @@ body {
     background-color: #f4f7fc;
     color: #333;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 a {
@@ -101,6 +102,10 @@ h1, p {
 
 .main-header.dark-nav .btn-primary:hover {
     background-color: #5a0eb0;
+}
+
+.main-header.dark-nav .mobile-menu-btn {
+    color: #333;
 }
 
 /* === Dropdown Menu === */
@@ -687,6 +692,63 @@ h1, p {
     margin: 0.5rem 0;
 }
 
+/* === Responsive Navigation === */
+.mobile-menu-btn {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #fff; /* Default for hero/light-on-dark headers */
+    padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+        position: relative;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        flex-direction: column;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 1rem;
+        color: #333 !important;
+    }
+    
+    .nav-menu a::after { display: none; }
+
+    .nav-action {
+        display: none;
+    }
+}
+
 /* === Dashboard Page (dashboard.html) === */
 .dashboard-container {
     max-width: 1200px;
@@ -784,6 +846,49 @@ h1, p {
 @media (max-width: 992px) {
     .test-body { grid-template-columns: 1fr; }
     .test-sidebar { order: -1; margin-bottom: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .overview-stat {
+        font-size: 2rem;
+    }
+
+    .test-page-container {
+        padding-top: 80px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .test-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    /* Admin Responsive Overrides */
+    .admin-container {
+        flex-direction: column;
+    }
+    .admin-sidebar {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .hero-headline {
+        font-size: 2rem;
+        word-wrap: break-word;
+    }
+    .hero-subheadline {
+        font-size: 1rem;
+    }
+    .hero-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
